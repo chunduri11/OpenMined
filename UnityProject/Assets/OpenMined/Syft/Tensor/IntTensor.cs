@@ -222,6 +222,17 @@ namespace OpenMined.Syft.Tensor
             return result;
         }
 
+        public IntTensor Tan(bool inline = false)
+        {
+            if (dataOnGpu)
+            {
+                throw new NotImplementedException();
+            }
+            IntTensor result = factory.Create(this.shape);
+            result.Data = data.AsParallel().Select(x => (int)Math.Tan((int)x)).ToArray();
+            return result;
+        }
+
         public int Trace()
         {
             if ((shape.Length != 2) || (shape[0] != shape[1]))
@@ -377,6 +388,12 @@ namespace OpenMined.Syft.Tensor
                         return string.Join(" ", Data);
 
                     }
+                }
+
+                case "tan":
+                {
+                    var result = Tan();
+                    return result.Id.ToString();
                 }
 
                 case "trace":
